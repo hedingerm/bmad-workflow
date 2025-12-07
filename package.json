@@ -1,0 +1,160 @@
+{
+  "name": "clique",
+  "displayName": "Clique",
+  "description": "Streamline agent development with BMAD method",
+  "version": "0.1.0",
+  "publisher": "hedinger-digital",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hedingerm/clique.git"
+  },
+  "homepage": "https://github.com/hedingerm/clique#readme",
+  "bugs": {
+    "url": "https://github.com/hedingerm/clique/issues"
+  },
+  "keywords": [
+    "bmad",
+    "workflow",
+    "agile",
+    "sprint",
+    "claude",
+    "ai",
+    "project-management"
+  ],
+  "icon": "images/icon.png",
+  "sponsor": {
+    "url": "https://github.com/bmad-code-org/BMAD-METHOD"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/sprint-status.yaml"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "bmad-workflow",
+          "title": "BMAD Workflow",
+          "icon": "$(checklist)"
+        }
+      ]
+    },
+    "views": {
+      "bmad-workflow": [
+        {
+          "id": "bmadStories",
+          "name": "Stories"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "bmad.runWorkflow",
+        "title": "Run Workflow",
+        "icon": "$(play)"
+      },
+      {
+        "command": "bmad.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "bmad.setStatus.backlog",
+        "title": "Set Status: Backlog"
+      },
+      {
+        "command": "bmad.setStatus.readyForDev",
+        "title": "Set Status: Ready for Dev"
+      },
+      {
+        "command": "bmad.setStatus.inProgress",
+        "title": "Set Status: In Progress"
+      },
+      {
+        "command": "bmad.setStatus.review",
+        "title": "Set Status: Review"
+      },
+      {
+        "command": "bmad.setStatus.done",
+        "title": "Set Status: Done"
+      },
+      {
+        "command": "bmad.selectFile",
+        "title": "Select Sprint File",
+        "icon": "$(folder-opened)"
+      }
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "bmad.runWorkflow",
+          "when": "view == bmadStories && viewItem =~ /actionable/",
+          "group": "inline"
+        },
+        {
+          "command": "bmad.setStatus.backlog",
+          "when": "view == bmadStories && viewItem =~ /^story/",
+          "group": "status@1"
+        },
+        {
+          "command": "bmad.setStatus.readyForDev",
+          "when": "view == bmadStories && viewItem =~ /^story/",
+          "group": "status@2"
+        },
+        {
+          "command": "bmad.setStatus.inProgress",
+          "when": "view == bmadStories && viewItem =~ /^story/",
+          "group": "status@3"
+        },
+        {
+          "command": "bmad.setStatus.review",
+          "when": "view == bmadStories && viewItem =~ /^story/",
+          "group": "status@4"
+        },
+        {
+          "command": "bmad.setStatus.done",
+          "when": "view == bmadStories && viewItem =~ /^story/",
+          "group": "status@5"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "bmad.selectFile",
+          "when": "view == bmadStories",
+          "group": "navigation@1"
+        },
+        {
+          "command": "bmad.refresh",
+          "when": "view == bmadStories",
+          "group": "navigation@2"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "bmad.statusSubmenu",
+        "label": "Set Status"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "yaml": "^2.3.4"
+  }
+}
