@@ -30,7 +30,7 @@ backlog → create-story → ready-for-dev → dev-story → in-progress → rev
 
 ### Sidebar
 
-The extension adds a "BMAD Workflow" view to the activity bar. The tree view displays:
+The extension adds a "Clique" view to the activity bar. The tree view displays:
 
 - Epics as collapsible parent nodes
 - Stories nested under their epics with status icons
@@ -106,10 +106,10 @@ This extension currently has no configurable settings. The sprint file selection
 
 | Command | Description |
 |---------|-------------|
-| `BMAD: Run Workflow` | Run the appropriate workflow for the selected story |
-| `BMAD: Refresh` | Reload the sprint-status.yaml file |
-| `BMAD: Select Sprint File` | Choose which sprint-status.yaml to use |
-| `BMAD: Set Status: *` | Change story status |
+| `Clique: Run Workflow` | Run the appropriate workflow for the selected story |
+| `Clique: Refresh` | Reload the sprint-status.yaml file |
+| `Clique: Select Sprint File` | Choose which sprint-status.yaml to use |
+| `Clique: Set Status: *` | Change story status |
 
 ## Known Issues
 

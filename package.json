@@ -1,8 +1,8 @@
 {
   "name": "clique",
   "displayName": "Clique",
-  "description": "Streamline agent development with BMAD method",
-  "version": "0.1.2",
+  "description": "Streamline agent development with the BMAD method",
+  "version": "0.1.3",
   "publisher": "hedinger-digital",
   "license": "MIT",
   "repository": {
@@ -40,53 +40,53 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "bmad-workflow",
+          "id": "clique",
           "title": "Clique",
           "icon": "images/sidebar-icon.svg"
         }
       ]
     },
     "views": {
-      "bmad-workflow": [
+      "clique": [
         {
-          "id": "bmadStories",
+          "id": "cliqueStories",
           "name": "Stories"
         }
       ]
     },
     "commands": [
       {
-        "command": "bmad.runWorkflow",
+        "command": "clique.runWorkflow",
         "title": "Run Workflow",
         "icon": "$(play)"
       },
       {
-        "command": "bmad.refresh",
+        "command": "clique.refresh",
         "title": "Refresh",
         "icon": "$(refresh)"
       },
       {
-        "command": "bmad.setStatus.backlog",
+        "command": "clique.setStatus.backlog",
         "title": "Set Status: Backlog"
       },
       {
-        "command": "bmad.setStatus.readyForDev",
+        "command": "clique.setStatus.readyForDev",
         "title": "Set Status: Ready for Dev"
       },
       {
-        "command": "bmad.setStatus.inProgress",
+        "command": "clique.setStatus.inProgress",
         "title": "Set Status: In Progress"
       },
       {
-        "command": "bmad.setStatus.review",
+        "command": "clique.setStatus.review",
         "title": "Set Status: Review"
       },
       {
-        "command": "bmad.setStatus.done",
+        "command": "clique.setStatus.done",
         "title": "Set Status: Done"
       },
       {
-        "command": "bmad.selectFile",
+        "command": "clique.selectFile",
         "title": "Select Sprint File",
         "icon": "$(folder-opened)"
       }
@@ -94,52 +94,52 @@
     "menus": {
       "view/item/context": [
         {
-          "command": "bmad.runWorkflow",
-          "when": "view == bmadStories && viewItem =~ /actionable/",
+          "command": "clique.runWorkflow",
+          "when": "view == cliqueStories && viewItem =~ /actionable/",
           "group": "inline"
         },
         {
-          "command": "bmad.setStatus.backlog",
-          "when": "view == bmadStories && viewItem =~ /^story/",
+          "command": "clique.setStatus.backlog",
+          "when": "view == cliqueStories && viewItem =~ /^story/",
           "group": "status@1"
         },
         {
-          "command": "bmad.setStatus.readyForDev",
-          "when": "view == bmadStories && viewItem =~ /^story/",
+          "command": "clique.setStatus.readyForDev",
+          "when": "view == cliqueStories && viewItem =~ /^story/",
           "group": "status@2"
         },
         {
-          "command": "bmad.setStatus.inProgress",
-          "when": "view == bmadStories && viewItem =~ /^story/",
+          "command": "clique.setStatus.inProgress",
+          "when": "view == cliqueStories && viewItem =~ /^story/",
           "group": "status@3"
         },
         {
-          "command": "bmad.setStatus.review",
-          "when": "view == bmadStories && viewItem =~ /^story/",
+          "command": "clique.setStatus.review",
+          "when": "view == cliqueStories && viewItem =~ /^story/",
           "group": "status@4"
         },
         {
-          "command": "bmad.setStatus.done",
-          "when": "view == bmadStories && viewItem =~ /^story/",
+          "command": "clique.setStatus.done",
+          "when": "view == cliqueStories && viewItem =~ /^story/",
           "group": "status@5"
         }
       ],
       "view/title": [
         {
-          "command": "bmad.selectFile",
-          "when": "view == bmadStories",
+          "command": "clique.selectFile",
+          "when": "view == cliqueStories",
           "group": "navigation@1"
         },
         {
-          "command": "bmad.refresh",
-          "when": "view == bmadStories",
+          "command": "clique.refresh",
+          "when": "view == cliqueStories",
           "group": "navigation@2"
         }
       ]
     },
     "submenus": [
       {
-        "id": "bmad.statusSubmenu",
+        "id": "clique.statusSubmenu",
         "label": "Set Status"
       }
     ]

@@ -12,7 +12,7 @@ let treeProvider: StoryTreeProvider;
 let workspaceRoot: string | null = null;
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log('BMAD Workflow extension activated');
+    console.log('Clique Workflow extension activated');
 
     treeProvider = new StoryTreeProvider();
 
@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     // Register tree view
-    const treeView = vscode.window.createTreeView('bmadStories', {
+    const treeView = vscode.window.createTreeView('cliqueStories', {
         treeDataProvider: treeProvider,
         showCollapseAll: true
     });
@@ -31,19 +31,19 @@ export function activate(context: vscode.ExtensionContext) {
     initializeSprintFile(context);
 
     // Register commands
-    const runWorkflowCmd = vscode.commands.registerCommand('bmad.runWorkflow', (item: StoryItem) => {
+    const runWorkflowCmd = vscode.commands.registerCommand('clique.runWorkflow', (item: StoryItem) => {
         if (item.itemType === 'story') {
             const story = item.data as Story;
             runWorkflow(story.id, story.status);
         }
     });
 
-    const refreshCmd = vscode.commands.registerCommand('bmad.refresh', () => {
+    const refreshCmd = vscode.commands.registerCommand('clique.refresh', () => {
         loadSprintData();
-        vscode.window.showInformationMessage('BMAD: Refreshed sprint status');
+        vscode.window.showInformationMessage('Clique: Refreshed sprint status');
     });
 
-    const selectFileCmd = vscode.commands.registerCommand('bmad.selectFile', () => {
+    const selectFileCmd = vscode.commands.registerCommand('clique.selectFile', () => {
         selectSprintFile(context);
     });
 
@@ -61,11 +61,11 @@ export function activate(context: vscode.ExtensionContext) {
         }
     };
 
-    const setBacklogCmd = vscode.commands.registerCommand('bmad.setStatus.backlog', setStatusHandler('backlog'));
-    const setReadyCmd = vscode.commands.registerCommand('bmad.setStatus.readyForDev', setStatusHandler('ready-for-dev'));
-    const setInProgressCmd = vscode.commands.registerCommand('bmad.setStatus.inProgress', setStatusHandler('in-progress'));
-    const setReviewCmd = vscode.commands.registerCommand('bmad.setStatus.review', setStatusHandler('review'));
-    const setDoneCmd = vscode.commands.registerCommand('bmad.setStatus.done', setStatusHandler('done'));
+    const setBacklogCmd = vscode.commands.registerCommand('clique.setStatus.backlog', setStatusHandler('backlog'));
+    const setReadyCmd = vscode.commands.registerCommand('clique.setStatus.readyForDev', setStatusHandler('ready-for-dev'));
+    const setInProgressCmd = vscode.commands.registerCommand('clique.setStatus.inProgress', setStatusHandler('in-progress'));
+    const setReviewCmd = vscode.commands.registerCommand('clique.setStatus.review', setStatusHandler('review'));
+    const setDoneCmd = vscode.commands.registerCommand('clique.setStatus.done', setStatusHandler('done'));
 
     // Watch for file changes
     setupFileWatcher();
@@ -87,7 +87,7 @@ async function initializeSprintFile(context: vscode.ExtensionContext): Promise<v
     }
 
     // Check if we have a saved selection
-    const savedPath = context.workspaceState.get<string>('bmad.selectedFile');
+    const savedPath = context.workspaceState.get<string>('clique.selectedFile');
     if (savedPath) {
         sprintStatusPath = savedPath;
         loadSprintData();
@@ -98,11 +98,11 @@ async function initializeSprintFile(context: vscode.ExtensionContext): Promise<v
     const files = findAllSprintStatusFiles(workspaceRoot);
 
     if (files.length === 0) {
-        vscode.window.showWarningMessage('BMAD: No sprint-status.yaml found in workspace');
+        vscode.window.showWarningMessage('Clique: No sprint-status.yaml found in workspace');
         treeProvider.setData(null);
     } else if (files.length === 1) {
         sprintStatusPath = files[0];
-        context.workspaceState.update('bmad.selectedFile', sprintStatusPath);
+        context.workspaceState.update('clique.selectedFile', sprintStatusPath);
         loadSprintData();
     } else {
         // Multiple files found, prompt user
@@ -118,7 +118,7 @@ async function selectSprintFile(context: vscode.ExtensionContext): Promise<void>
     const files = findAllSprintStatusFiles(workspaceRoot);
 
     if (files.length === 0) {
-        vscode.window.showWarningMessage('BMAD: No sprint-status.yaml files found');
+        vscode.window.showWarningMessage('Clique: No sprint-status.yaml files found');
         return;
     }
 
@@ -131,14 +131,14 @@ async function selectSprintFile(context: vscode.ExtensionContext): Promise<void>
 
     const selected = await vscode.window.showQuickPick(items, {
         placeHolder: 'Select sprint-status.yaml file',
-        title: 'BMAD: Select Sprint File'
+        title: 'Clique: Select Sprint File'
     });
 
     if (selected) {
         sprintStatusPath = selected.fullPath;
-        context.workspaceState.update('bmad.selectedFile', sprintStatusPath);
+        context.workspaceState.update('clique.selectedFile', sprintStatusPath);
         loadSprintData();
-        vscode.window.showInformationMessage(`BMAD: Using ${selected.label}`);
+        vscode.window.showInformationMessage(`Clique: Using ${selected.label}`);
     }
 }
 
@@ -165,7 +165,7 @@ function loadSprintData(): void {
             (sum, e) => sum + e.stories.filter(s => s.status === 'done').length,
             0
         );
-        console.log(`BMAD: Loaded ${totalStories} stories (${doneStories} done) from ${sprintStatusPath}`);
+        console.log(`Clique: Loaded ${totalStories} stories (${doneStories} done) from ${sprintStatusPath}`);
     }
 }
 
@@ -217,7 +217,7 @@ function setupNativeWatcher(): void {
             clearTimeout(debounceTimer);
         }
         debounceTimer = setTimeout(() => {
-            console.log(`BMAD: Native watcher detected ${reason}`);
+            console.log(`Clique: Native watcher detected ${reason}`);
             loadSprintData();
         }, debounceMs);
     };
@@ -243,7 +243,7 @@ function setupNativeWatcher(): void {
         });
 
         nativeWatcher.on('error', (error) => {
-            console.error('BMAD: Native file watcher error:', error);
+            console.error('Clique: Native file watcher error:', error);
             // Try to re-establish watcher on error
             setTimeout(() => {
                 if (sprintStatusPath && fs.existsSync(sprintStatusPath)) {
@@ -252,7 +252,7 @@ function setupNativeWatcher(): void {
             }, 1000);
         });
     } catch (error) {
-        console.error('BMAD: Failed to set up native file watcher:', error);
+        console.error('Clique: Failed to set up native file watcher:', error);
     }
 }
 

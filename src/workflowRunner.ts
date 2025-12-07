@@ -21,7 +21,7 @@ const WORKFLOW_ACTIONS: Partial<Record<StoryStatus, WorkflowAction>> = {
     }
 };
 
-const TERMINAL_PREFIX = 'BMAD: ';
+const TERMINAL_PREFIX = 'Clique: ';
 
 export function getWorkflowAction(status: StoryStatus): WorkflowAction | null {
     return WORKFLOW_ACTIONS[status] || null;

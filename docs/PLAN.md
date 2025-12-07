@@ -1,4 +1,4 @@
-# BMAD Workflow VS Code Extension
+# Clique VS Code Extension
 
 ## Overview
 
@@ -31,7 +31,7 @@ backlog → create-story → ready-for-dev → dev-story → in-progress → (ma
 ## File Structure
 
 ```
-bmad-workflow/
+clique/
 ├── package.json              # Extension manifest with commands, views
 ├── tsconfig.json             # TypeScript configuration
 ├── src/
@@ -47,20 +47,20 @@ bmad-workflow/
 
 | Command                  | Description                              |
 | ------------------------ | ---------------------------------------- |
-| `bmad.runWorkflow`       | Run the appropriate workflow for a story |
-| `bmad.refresh`           | Reload sprint-status.yaml                |
-| `bmad.selectFile`        | Choose which sprint-status.yaml to use   |
-| `bmad.setStatus.*`       | Change story status (backlog, ready-for-dev, in-progress, review, done) |
-| `bmad.focusTerminal`     | Focus/show a terminal (click on terminal item) |
-| `bmad.closeTerminal`     | Close a terminal (trash icon)            |
-| `bmad.resumeSession`     | Resume a Claude session where you left off |
-| `bmad.clearSession`      | Clear saved session for a story          |
+| `clique.runWorkflow`       | Run the appropriate workflow for a story |
+| `clique.refresh`           | Reload sprint-status.yaml                |
+| `clique.selectFile`        | Choose which sprint-status.yaml to use   |
+| `clique.setStatus.*`       | Change story status (backlog, ready-for-dev, in-progress, review, done) |
+| `clique.focusTerminal`     | Focus/show a terminal (click on terminal item) |
+| `clique.closeTerminal`     | Close a terminal (trash icon)            |
+| `clique.resumeSession`     | Resume a Claude session where you left off |
+| `clique.clearSession`      | Clear saved session for a story          |
 
 ## UI
 
 ### Sidebar Tree View
 ```
-BMAD WORKFLOW
+CLIQUE
 ├── [folder] Select Sprint File
 ├── [refresh] Refresh
 │
@@ -69,7 +69,7 @@ BMAD WORKFLOW
 ├── Epic 4: Admin Migration [in-progress]
 │   ├── 4-6-create-admin-services-domain [done] ✓
 │   ├── 4-7-create-admin-staff-domain [review] ▶ (play button)
-│   │   └── 🖥 BMAD: 4-7-create-admin-staff-domain  [trash] (close)
+│   │   └── 🖥 Clique: 4-7-create-admin-staff-domain  [trash] (close)
 │   ├── 4-8-create-admin-team-domain [backlog] ▶ (play button)
 │   └── ...
 ```

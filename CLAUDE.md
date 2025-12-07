@@ -13,7 +13,7 @@ vsce package         # Package as .vsix for distribution
 
 ## Architecture
 
-This is a VS Code extension that integrates with the BMAD (Build, Measure, Analyze, Deliver) workflow methodology. It reads `sprint-status.yaml` files and provides UI to run Claude workflows based on story status.
+Clique is a VS Code extension that integrates with the BMAD (Build, Measure, Analyze, Deliver) workflow methodology. It reads `sprint-status.yaml` files and provides UI to run Claude workflows based on story status.
 
 ### Core Components
 
