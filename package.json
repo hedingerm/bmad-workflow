@@ -2,7 +2,7 @@
   "name": "clique",
   "displayName": "Clique",
   "description": "Streamline agent development with the BMAD method",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "publisher": "hedinger-digital",
   "license": "MIT",
   "repository": {
@@ -139,32 +139,32 @@
       "view/item/context": [
         {
           "command": "clique.runWorkflow",
-          "when": "view == cliqueStories && viewItem =~ /actionable/",
+          "when": "view == cliqueImplementation && viewItem == story-actionable",
           "group": "inline"
         },
         {
           "command": "clique.setStatus.backlog",
-          "when": "view == cliqueStories && viewItem =~ /^story/",
+          "when": "view == cliqueImplementation && viewItem =~ /^story/",
           "group": "status@1"
         },
         {
           "command": "clique.setStatus.readyForDev",
-          "when": "view == cliqueStories && viewItem =~ /^story/",
+          "when": "view == cliqueImplementation && viewItem =~ /^story/",
           "group": "status@2"
         },
         {
           "command": "clique.setStatus.inProgress",
-          "when": "view == cliqueStories && viewItem =~ /^story/",
+          "when": "view == cliqueImplementation && viewItem =~ /^story/",
           "group": "status@3"
         },
         {
           "command": "clique.setStatus.review",
-          "when": "view == cliqueStories && viewItem =~ /^story/",
+          "when": "view == cliqueImplementation && viewItem =~ /^story/",
           "group": "status@4"
         },
         {
           "command": "clique.setStatus.done",
-          "when": "view == cliqueStories && viewItem =~ /^story/",
+          "when": "view == cliqueImplementation && viewItem =~ /^story/",
           "group": "status@5"
         },
         {
@@ -186,12 +186,12 @@
       "view/title": [
         {
           "command": "clique.selectFile",
-          "when": "view == cliqueStories",
+          "when": "view == cliqueImplementation",
           "group": "navigation@1"
         },
         {
           "command": "clique.refresh",
-          "when": "view == cliqueStories",
+          "when": "view == cliqueImplementation",
           "group": "navigation@2"
         }
       ]

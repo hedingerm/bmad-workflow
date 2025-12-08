@@ -25,6 +25,13 @@ export class WorkflowTreeItem extends vscode.TreeItem {
         this.tooltip = this.buildTooltip();
         this.iconPath = this.getIcon();
         this.contextValue = this.getContextValue();
+
+        // Set click command to show detail panel
+        this.command = {
+            command: 'clique.showWorkflowDetail',
+            title: 'Show Details',
+            arguments: [this]
+        };
     }
 
     private buildTooltip(): string {

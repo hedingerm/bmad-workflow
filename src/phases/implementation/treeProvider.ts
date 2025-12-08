@@ -35,7 +35,16 @@ class StoryTreeItem extends vscode.TreeItem {
         const status = this.data.status;
         this.description = `[${status}]`;
         this.iconPath = this.getIcon(status);
-        this.contextValue = this.itemType === 'story' ? 'story' : 'epic';
+
+        if (this.itemType === 'story') {
+            // Stories with actions get 'story-actionable' so play button shows
+            const actionableStatuses = ['backlog', 'ready-for-dev', 'review'];
+            this.contextValue = actionableStatuses.includes(status)
+                ? 'story-actionable'
+                : 'story';
+        } else {
+            this.contextValue = 'epic';
+        }
     }
 
     private getIcon(status: StoryStatus): vscode.ThemeIcon {
