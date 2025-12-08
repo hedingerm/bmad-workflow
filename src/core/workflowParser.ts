@@ -34,7 +34,7 @@ export function parseWorkflowStatus(filePath: string): WorkflowData | null {
     };
 }
 
-export function getItemsForPhase(data: WorkflowData, phaseNumber: number): WorkflowItem[] {
+export function getItemsForPhase(data: WorkflowData, phaseNumber: number | 'prerequisite'): WorkflowItem[] {
     return data.items.filter(item => item.phase === phaseNumber);
 }
 
@@ -52,6 +52,10 @@ export function findWorkflowStatusFile(workspaceRoot: string): string | null {
     return null;
 }
 
+function escapeRegex(str: string): string {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 export function updateWorkflowItemStatus(
     filePath: string,
     itemId: string,
@@ -66,7 +70,7 @@ export function updateWorkflowItemStatus(
     // Use regex to find and update the status for this item
     // Pattern matches: id: "itemId" followed by status: "value" within the same item block
     const regex = new RegExp(
-        `(- id: ["']?${itemId}["']?[\\s\\S]*?status:\\s*)["']?[^\\s"']+["']?`,
+        `(- id: ["']?${escapeRegex(itemId)}["']?[\\s\\S]*?status:\\s*)["']?[^\\s"']+["']?`,
         'm'
     );
 
