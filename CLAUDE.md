@@ -12,33 +12,64 @@ npm run watch        # Watch mode with esbuild
 vsce package         # Package as .vsix for distribution
 ```
 
+## Publishing
+
+The extension auto-publishes to VS Code Marketplace via GitHub Actions when you push to main.
+
+**To release a new version:**
+1. Bump version in `package.json`
+2. Push to main
+3. GitHub Actions handles the publish automatically
+
+Do NOT run `vsce publish` manually - the workflow does it for you.
+
 ## Architecture
 
-Clique is a VS Code extension that integrates with the BMAD workflow methodology. It reads `sprint-status.yaml` files and provides a sidebar UI to run Claude workflows based on story status.
+Clique is a VS Code extension that integrates with the BMAD workflow methodology. It provides a phase-based UI for the full BMAD methodology.
 
-### Core Components
+### Directory Structure
 
-- **extension.ts** - Activation entry point. Registers commands, sets up VS Code and native file watchers (dual-watcher pattern handles both VS Code events and external file changes).
-- **sprintParser.ts** - Parses `sprint-status.yaml` files using the `yaml` library. Extracts epics/stories from the `development_status` section. Updates story status in-place using regex replacement to preserve YAML formatting.
-- **storyTreeProvider.ts** - VS Code TreeDataProvider for sidebar. Shows epics > stories hierarchy with status-colored icons.
-- **workflowRunner.ts** - Spawns terminals with Claude workflow commands. Maps statuses to BMAD workflow slash commands.
+```
+src/
+├── core/                    # Shared infrastructure
+│   ├── types.ts             # WorkflowItem, WorkflowData, PhaseConfig, Story, Epic
+│   ├── workflowParser.ts    # Parses bmm-workflow-status.yaml
+│   ├── sprintParser.ts      # Parses sprint-status.yaml
+│   └── fileWatcher.ts       # Dual-watcher for both file types
+├── phases/                  # Phase-specific tree providers
+│   ├── baseWorkflowProvider.ts  # Base class with WorkflowTreeItem
+│   ├── discovery/           # Phase 0
+│   ├── planning/            # Phase 1
+│   ├── solutioning/         # Phase 2
+│   └── implementation/      # Phase 3 + sprint stories
+├── ui/                      # UI components
+│   ├── detailPanel.ts       # Webview for workflow details
+│   └── welcomeView.ts       # Welcome view for initialization
+└── extension.ts             # Activation entry point
+```
+
+### Data Sources
+
+- **bmm-workflow-status.yaml** - Tracks workflow progress across phases 0-3 (Discovery, Planning, Solutioning, Implementation)
+- **sprint-status.yaml** - Tracks sprint stories within Phase 3 Implementation
 
 ### Workflow State Machine
 
-Actionable statuses (show play button):
+**Phase workflows** (from bmm-workflow-status.yaml):
+- Status `required`/`optional`/`recommended` → Actionable (show play button)
+- Status `conditional` → Waiting on prerequisites
+- Status `skipped` → Explicitly skipped
+- Status is file path (e.g., `docs/prd.md`) → Completed
+
+**Story workflows** (from sprint-status.yaml):
 - `backlog` → runs `claude "/bmad:bmm:workflows:create-story <story-id>"`
 - `ready-for-dev` → runs `claude "/bmad:bmm:workflows:dev-story <story-id>"`
 - `review` → runs `claude "/bmad:bmm:workflows:code-review <story-id>"`
 
-Non-actionable: `drafted`, `in-progress`, `done`, `completed`, `optional`
-
 ### Key Data Structures
 
-- `SprintData` contains `project`, `projectKey`, and array of `Epic`
-- `Epic` contains `id`, `name`, `status`, and array of `Story`
-- `Story` contains `id`, `status`, `epicId`
-- Story IDs follow pattern `{epic-num}-{story-num}-{description}` (e.g., `4-7-create-admin-staff-domain`)
-
-### Sprint Status File Format
-
-The parser reads `development_status` section where keys like `epic-N` define epics and keys like `N-M-description` define stories belonging to epic N.
+- `WorkflowItem` - id, phase, status, agent, command, note
+- `WorkflowData` - project info + array of WorkflowItem
+- `SprintData` - project, projectKey, array of Epic
+- `Epic` - id, name, status, array of Story
+- `Story` - id, status, epicId
