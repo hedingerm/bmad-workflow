@@ -4,10 +4,11 @@
 export interface WorkflowItem {
     id: string;
     phase: number | 'prerequisite';
-    status: string;  // 'required' | 'optional' | 'conditional' | 'skipped' | file path
-    agent: string;
-    command: string;
+    status: string;  // 'required' | 'optional' | 'conditional' | 'skipped' | 'complete' | 'not_started' | file path
+    agent?: string;
+    command?: string;
     note?: string;
+    outputFile?: string;  // For completed workflows in new format
 }
 
 export interface WorkflowData {

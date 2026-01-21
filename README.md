@@ -66,7 +66,7 @@ If your workspace contains multiple `sprint-status.yaml` files:
 
 ## Workflow Status File Format
 
-The extension reads `docs/bmm-workflow-status.yaml` to track BMAD methodology progress:
+The extension reads `bmm-workflow-status.yaml` to track BMAD methodology progress (searches `_bmad-output/`, `docs/`, then root):
 
 ```yaml
 project: my-project
