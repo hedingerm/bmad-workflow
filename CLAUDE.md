@@ -53,7 +53,7 @@ src/
 The extension searches for these files in the workspace:
 
 - **bmm-workflow-status.yaml** - Tracks workflow progress across phases 0-3 (Discovery, Planning, Solutioning, Implementation)
-  - Search order: `_bmad-output/bmm-workflow-status.yaml`, `docs/bmm-workflow-status.yaml`, root
+  - Search order: `_bmad-output/planning-artifacts/bmm-workflow-status.yaml`, `_bmad-output/bmm-workflow-status.yaml`, `docs/bmm-workflow-status.yaml`, root
 - **sprint-status.yaml** - Tracks sprint stories within Phase 3 Implementation
   - Recursive search finds any `sprint-status.yaml` (typically in `_bmad-output/implementation-artifacts/`)
 

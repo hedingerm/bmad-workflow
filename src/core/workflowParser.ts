@@ -136,6 +136,7 @@ export function getItemsForPhase(data: WorkflowData, phaseNumber: number | 'prer
 
 export function findWorkflowStatusFile(workspaceRoot: string): string | null {
     const candidates = [
+        path.join(workspaceRoot, '_bmad-output', 'planning-artifacts', 'bmm-workflow-status.yaml'),
         path.join(workspaceRoot, '_bmad-output', 'bmm-workflow-status.yaml'),
         path.join(workspaceRoot, 'docs', 'bmm-workflow-status.yaml'),
         path.join(workspaceRoot, 'bmm-workflow-status.yaml')
