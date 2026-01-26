@@ -78,7 +78,8 @@ export class WorkflowDetailPanel {
         const title = this.formatTitle(item.id);
         const isActionable = item.status === 'required' ||
                             item.status === 'optional' ||
-                            item.status === 'recommended';
+                            item.status === 'recommended' ||
+                            item.status === 'conditional';
         const isCompleted = !isActionable && item.status !== 'skipped' && item.status !== 'conditional';
 
         return `<!DOCTYPE html>
