@@ -105,6 +105,36 @@ function parseOldFormat(parsed: any): WorkflowItem[] {
     }));
 }
 
+function parseFlatFormat(parsed: any): WorkflowItem[] {
+    const workflowStatus = parsed.workflow_status || {};
+    const items: WorkflowItem[] = [];
+
+    for (const [id, status] of Object.entries(workflowStatus)) {
+        items.push({
+            id,
+            phase: inferPhase(id),
+            status: status as string,
+            agent: inferAgent(id),
+            command: inferCommand(id),
+            note: undefined,
+            outputFile: isFilePath(status as string) ? status as string : undefined
+        });
+    }
+
+    // Sort by phase, then by ID
+    return items.sort((a, b) => {
+        const phaseA = typeof a.phase === 'number' ? a.phase : -1;
+        const phaseB = typeof b.phase === 'number' ? b.phase : -1;
+        if (phaseA !== phaseB) return phaseA - phaseB;
+        return a.id.localeCompare(b.id);
+    });
+}
+
+function isFilePath(value: string): boolean {
+    // Check if the value looks like a file path (contains / or ends with common extensions)
+    return value.includes('/') || /\.(md|yaml|yml|json|txt)$/.test(value);
+}
+
 export function parseWorkflowStatus(filePath: string): WorkflowData | null {
     if (!fs.existsSync(filePath)) {
         return null;
@@ -113,9 +143,21 @@ export function parseWorkflowStatus(filePath: string): WorkflowData | null {
     const content = fs.readFileSync(filePath, 'utf-8');
     const parsed = yaml.parse(content);
 
-    // Detect format: new format has 'workflows' as object, old has 'workflow_status' as array
+    // Detect format:
+    // - New format: 'workflows' as object with nested status fields
+    // - Flat format: 'workflow_status' as object with key-value pairs (id: status)
+    // - Old format: 'workflow_status' as array of objects
     const isNewFormat = parsed.workflows && typeof parsed.workflows === 'object' && !Array.isArray(parsed.workflows);
-    const items = isNewFormat ? parseNewFormat(parsed) : parseOldFormat(parsed);
+    const isFlatFormat = parsed.workflow_status && typeof parsed.workflow_status === 'object' && !Array.isArray(parsed.workflow_status);
+
+    let items: WorkflowItem[];
+    if (isNewFormat) {
+        items = parseNewFormat(parsed);
+    } else if (isFlatFormat) {
+        items = parseFlatFormat(parsed);
+    } else {
+        items = parseOldFormat(parsed);
+    }
 
     return {
         lastUpdated: parsed.last_updated || '',
@@ -168,6 +210,7 @@ export function updateWorkflowItemStatus(
 
     // Detect format and use appropriate update strategy
     const isNewFormat = parsed.workflows && typeof parsed.workflows === 'object' && !Array.isArray(parsed.workflows);
+    const isFlatFormat = parsed.workflow_status && typeof parsed.workflow_status === 'object' && !Array.isArray(parsed.workflow_status);
 
     if (isNewFormat) {
         // New format: workflows object with nested status
@@ -182,6 +225,23 @@ export function updateWorkflowItemStatus(
         }
 
         const updatedContent = content.replace(regex, `$1${newStatus}`);
+        fs.writeFileSync(filePath, updatedContent, 'utf-8');
+        return true;
+    } else if (isFlatFormat) {
+        // Flat format: workflow_status object with key-value pairs
+        // Pattern: "  itemId: value" (value can be quoted or unquoted)
+        const regex = new RegExp(
+            `(^[ \\t]*${escapeRegex(itemId)}:\\s*)["']?[^\\n"']+["']?`,
+            'm'
+        );
+
+        if (!regex.test(content)) {
+            return false;
+        }
+
+        // Quote the new status if it contains special characters
+        const quotedStatus = newStatus.includes('/') || newStatus.includes(':') ? `"${newStatus}"` : newStatus;
+        const updatedContent = content.replace(regex, `$1${quotedStatus}`);
         fs.writeFileSync(filePath, updatedContent, 'utf-8');
         return true;
     } else {

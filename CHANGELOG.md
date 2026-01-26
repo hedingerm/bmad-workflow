@@ -5,6 +5,35 @@ All notable changes to the "Clique" extension will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.5] - 2026-01-26
+
+### Added
+
+- Support for flat `workflow_status` format with key-value pairs
+
+## [0.2.4] - 2026-01-26
+
+### Added
+
+- Search for `bmm-workflow-status.yaml` in `_bmad-output/planning-artifacts/` folder
+
+## [0.2.3] - 2026-01-26
+
+### Added
+
+- Support for new `_bmad-output` folder structure and workflow format
+
+### Fixed
+
+- Tree item click routing and Implementation panel menus
+
+## [0.2.0] - 2025-12-07
+
+### Changed
+
+- Phase-based workflow UI architecture
+- Auto-publish via GitHub Actions
+
 ## [0.1.5] - 2025-12-07
 
 ### Changed
